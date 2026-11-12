@@ -8,11 +8,19 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { id } = await params;
   const body = (await req.json().catch(() => ({}))) as { links?: unknown; message?: unknown };
 
-  const links = (Array.isArray(body.links) ? body.links : [])
-    .map((l) => String(l).trim())
-    .filter((l) => /^https:\/\/\S+$/i.test(l))
-    .slice(0, 20);
-  if (links.length === 0) return NextResponse.json({ error: "Add at least one https:// link" }, { status: 400 });
+  // Accept pasted links with or without a scheme ("drive.google.com/…" → "https://drive.google.com/…").
+  const raw = (Array.isArray(body.links) ? body.links : []).map((l) => String(l).trim()).filter(Boolean);
+  const links: string[] = [];
+  for (const l of raw.slice(0, 20)) {
+    try {
+      const u = new URL(/^https?:\/\//i.test(l) ? l : `https://${l}`);
+      if (!u.hostname.includes(".")) throw new Error();
+      links.push(u.toString());
+    } catch {
+      return NextResponse.json({ error: `"${l.slice(0, 60)}" isn't a link` }, { status: 400 });
+    }
+  }
+  if (links.length === 0) return NextResponse.json({ error: "Add at least one link" }, { status: 400 });
   const message = String(body.message ?? "").slice(0, 3000);
 
   const row = await getRequest(id);

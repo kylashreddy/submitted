@@ -24,7 +24,17 @@ function Countdown({ r }: { r: RequestRow }) {
 
 type DueFilter = "ALL" | "HOT" | "WEEK" | "OVERDUE";
 
-export function AdminBoard({ initial, crew, email }: { initial: RequestRow[]; crew: string[]; email: string }) {
+export function AdminBoard({
+  initial,
+  crew,
+  email,
+  emailOn,
+}: {
+  initial: RequestRow[];
+  crew: string[];
+  email: string;
+  emailOn: boolean;
+}) {
   const router = useRouter();
   const [rows, setRows] = useState(initial);
   const [view, setView] = useState<"table" | "board">("board");
@@ -248,6 +258,7 @@ export function AdminBoard({ initial, crew, email }: { initial: RequestRow[]; cr
           key={open.id}
           r={open}
           crew={crew}
+          emailOn={emailOn}
           onClose={() => setOpenId(null)}
           onPatch={(body) => patch(open.id, body)}
           onDelivered={(row) => setRows((rs) => rs.map((x) => (x.id === row.id ? row : x)))}
@@ -267,6 +278,7 @@ export function AdminBoard({ initial, crew, email }: { initial: RequestRow[]; cr
 function Drawer({
   r,
   crew,
+  emailOn,
   onClose,
   onPatch,
   onDelivered,
@@ -274,6 +286,7 @@ function Drawer({
 }: {
   r: RequestRow;
   crew: string[];
+  emailOn: boolean;
   onClose: () => void;
   onPatch: (b: Partial<Pick<RequestRow, "status" | "assignee" | "admin_notes">>) => Promise<boolean>;
   onDelivered: (r: RequestRow) => void;
@@ -292,18 +305,26 @@ function Drawer({
 
   async function deliver() {
     const list = links.split(/\s+/).filter(Boolean);
-    if (!confirm(`Send the delivery email with ${list.length} link(s) to ${r.email}?`)) return;
+    const ask = emailOn
+      ? `Send the delivery email with ${list.length} link(s) to ${r.email}?`
+      : `Email is not set up, so nothing will be sent to ${r.email}. Save the links and mark this DELIVERED anyway?`;
+    if (!confirm(ask)) return;
     setSending(true);
-    const res = await fetch(`/api/admin/requests/${r.id}/deliver`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ links: list, message }),
-    });
-    setSending(false);
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok) return toast(json.error ?? "Send failed");
-    onDelivered(json.row);
-    toast(json.dryRun ? "DRY RUN — RESEND NOT CONFIGURED, LOGGED TO SERVER" : `DELIVERED TO ${r.email}`);
+    try {
+      const res = await fetch(`/api/admin/requests/${r.id}/deliver`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ links: list, message }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) return toast(`NOT SENT — ${json.error ?? `server error ${res.status}`}`);
+      onDelivered(json.row);
+      toast(json.dryRun ? "SAVED + MARKED DELIVERED — NO EMAIL (RESEND NOT SET UP)" : `DELIVERED TO ${r.email}`);
+    } catch {
+      toast("NOT SENT — NETWORK ERROR, TRY AGAIN");
+    } finally {
+      setSending(false);
+    }
   }
 
   const wa = "https://wa.me/" + r.phone.replace(/[^\d]/g, "").replace(/^(\d{10})$/, "91$1");
@@ -395,6 +416,11 @@ function Drawer({
             <p className="display text-2xl">
               SEND THE <em>drop</em>.
             </p>
+            {!emailOn && (
+              <p className="mono mt-3 bg-alarm px-2 py-1.5 text-paper">
+                EMAIL IS OFF — ADD RESEND_API_KEY ON THE SERVER. UNTIL THEN, SEND THE LINKS ON WHATSAPP.
+              </p>
+            )}
             {r.delivered_at && (
               <p className="mono mt-2 text-ink/55">LAST SENT {new Date(r.delivered_at).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</p>
             )}
@@ -403,7 +429,7 @@ function Drawer({
             <label className={`${label} mt-4`} htmlFor="msg">MESSAGE</label>
             <textarea id="msg" className={`${box} min-h-24`} value={message} onChange={(e) => setMessage(e.target.value)} />
             <button onClick={deliver} disabled={sending || !links.trim()} className="btn btn-primary mt-3 w-full">
-              {sending ? "SENDING…" : "SEND DELIVERY EMAIL →"}
+              {sending ? "SENDING…" : emailOn ? "SEND DELIVERY EMAIL →" : "SAVE LINKS + MARK DELIVERED →"}
             </button>
           </div>
         </div>

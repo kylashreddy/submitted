@@ -10,5 +10,5 @@ export default async function AdminPage() {
   const admin = await getAdmin();
   if (!admin) redirect("/admin/login");
   const rows = await listRequests();
-  return <AdminBoard initial={rows} crew={crewNames()} email={admin.email} />;
+  return <AdminBoard initial={rows} crew={crewNames()} email={admin.email} emailOn={Boolean(process.env.RESEND_API_KEY)} />;
 }
