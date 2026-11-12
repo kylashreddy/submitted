@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SUBMITTED.
 
-## Getting Started
+Project-help studio site for BTech students — landing page, Typeform-style request form, and a crew-only admin board.
 
-First, run the development server:
+**Stack:** Next.js 15 (App Router) · Tailwind v4 · Framer Motion (form transitions) · Supabase (requests + admin auth) · Resend (emails)
+
+## Run it locally
 
 ```bash
+npm install
+cp .env.example .env.local   # then set ADMIN_PASSWORD
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Without Supabase keys, requests are saved to `.data/requests.json` and `/admin` uses `ADMIN_PASSWORD`.
+Without a Resend key, emails are logged to the server console instead of sent. So the whole
+flow (form → board → delivery email) works before any accounts exist.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Go live
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Supabase** — create a project, run `supabase/schema.sql` in the SQL editor.
+   Under Authentication → Users, add each crew member (email + password) and turn **off** public sign-ups.
+   Set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
+   and `ADMIN_EMAILS` (comma-separated crew emails allowed into `/admin`).
+2. **Resend** — verify your sending domain, set `RESEND_API_KEY`, `RESEND_FROM`, and `CREW_INBOX`
+   (gets an alert for every new request).
+3. **Vercel** — import the repo, paste the env vars, deploy. Set `NEXT_PUBLIC_SITE_URL` to the real domain.
 
-## Learn More
+## Where things live
 
-To learn more about Next.js, take a look at the following resources:
+| What | File |
+| --- | --- |
+| All landing copy (steps, tracks, prices, testimonials, crew, FAQ) | `src/lib/content.ts` |
+| Colors, fonts, buttons, motion | `src/app/globals.css` |
+| Sections | `src/components/*.tsx` |
+| The form | `src/components/RequestForm.tsx` |
+| Admin board + drawer | `src/components/admin/AdminBoard.tsx` |
+| Data layer (Supabase / local file) | `src/lib/store.ts` |
+| Emails | `src/lib/email.ts` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**House rules:** the public site never shows prices, budgets or crew names. It's for Jain University
+BTech students only (the server stores `college = Jain University` no matter what the client sends),
+and the footer says the crew is independent and not affiliated with the university. Crew names
+for the admin "assign to" menu come from the `CREW_MEMBERS` env var, so they never ship to the public bundle.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Before launch, replace the placeholders:** testimonials and stats in `content.ts` are sample copy,
+and crew portraits are generated placeholders — add `photo: "/crew/01.jpg"` (file in `public/crew/`)
+to each crew entry.
