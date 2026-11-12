@@ -1,11 +1,23 @@
+import nodemailer, { type Transporter } from "nodemailer";
 import { Resend } from "resend";
 import type { RequestRow } from "./types";
 
-const FROM = process.env.RESEND_FROM ?? "SUBMITTED. <onboarding@resend.dev>";
+// Sender, in order of preference:
+//  1. Gmail (GMAIL_USER + GMAIL_APP_PASSWORD) — works without owning a domain.
+//  2. Resend (RESEND_API_KEY) — needs a verified domain to reach students.
+//  3. Neither → dry run: logged to the server console, nothing sent.
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, ""); // Google shows it as "abcd efgh ijkl mnop"
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
+export const emailProvider = (): "gmail" | "resend" | null =>
+  GMAIL_USER && GMAIL_PASS ? "gmail" : process.env.RESEND_API_KEY ? "resend" : null;
+
+/** Where new-request alerts go. Defaults to the sending Gmail inbox. */
+const crewInbox = () => process.env.CREW_INBOX || GMAIL_USER;
+
+let gmail: Transporter | null = null;
 let resend: Resend | null = null;
-const client = () => (process.env.RESEND_API_KEY ? (resend ??= new Resend(process.env.RESEND_API_KEY)) : null);
 
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -26,14 +38,21 @@ ${body}
 const p = (t: string) => `<p style="margin:0 0 14px;font-size:16px;line-height:1.55">${t}</p>`;
 
 async function send(to: string | string[], subject: string, html: string, replyTo?: string) {
-  const c = client();
-  if (!c) {
-    console.info(`[email dry-run] to=${to} subject="${subject}" (set RESEND_API_KEY to send for real)`);
-    return { dryRun: true };
+  const provider = emailProvider();
+  if (provider === "gmail") {
+    gmail ??= nodemailer.createTransport({ service: "gmail", auth: { user: GMAIL_USER, pass: GMAIL_PASS } });
+    await gmail.sendMail({ from: `SUBMITTED. <${GMAIL_USER}>`, to, subject, html, replyTo });
+    return { dryRun: false };
   }
-  const { error } = await c.emails.send({ from: FROM, to, subject, html, replyTo });
-  if (error) throw new Error(error.message);
-  return { dryRun: false };
+  if (provider === "resend") {
+    resend ??= new Resend(process.env.RESEND_API_KEY);
+    const from = process.env.RESEND_FROM ?? "SUBMITTED. <onboarding@resend.dev>";
+    const { error } = await resend.emails.send({ from, to, subject, html, replyTo });
+    if (error) throw new Error(error.message);
+    return { dryRun: false };
+  }
+  console.info(`[email dry-run] to=${to} subject="${subject}" (set GMAIL_USER + GMAIL_APP_PASSWORD to send for real)`);
+  return { dryRun: true };
 }
 
 export function sendConfirmation(r: RequestRow) {
@@ -52,7 +71,7 @@ export function sendConfirmation(r: RequestRow) {
 }
 
 export function notifyCrew(r: RequestRow) {
-  const to = process.env.CREW_INBOX;
+  const to = crewInbox();
   if (!to) return Promise.resolve({ dryRun: true });
   const rows = [
     ["Name", r.name],
@@ -92,6 +111,6 @@ export function sendDelivery(r: RequestRow, links: string[], message: string) {
         `<table role="presentation" width="100%" style="border-collapse:collapse;margin:8px 0 18px">${list}</table>` +
         p("Stuck on anything? Reply to this mail or ping us on WhatsApp — doubt calls are part of the deal."),
     ),
-    process.env.CREW_INBOX,
+    crewInbox(),
   );
 }

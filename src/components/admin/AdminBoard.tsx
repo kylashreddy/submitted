@@ -319,7 +319,7 @@ function Drawer({
       const json = await res.json().catch(() => ({}));
       if (!res.ok) return toast(`NOT SENT — ${json.error ?? `server error ${res.status}`}`);
       onDelivered(json.row);
-      toast(json.dryRun ? "SAVED + MARKED DELIVERED — NO EMAIL (RESEND NOT SET UP)" : `DELIVERED TO ${r.email}`);
+      toast(json.dryRun ? "SAVED + MARKED DELIVERED — NO EMAIL (EMAIL NOT SET UP)" : `DELIVERED TO ${r.email}`);
     } catch {
       toast("NOT SENT — NETWORK ERROR, TRY AGAIN");
     } finally {
@@ -418,7 +418,7 @@ function Drawer({
             </p>
             {!emailOn && (
               <p className="mono mt-3 bg-alarm px-2 py-1.5 text-paper">
-                EMAIL IS OFF — ADD RESEND_API_KEY ON THE SERVER. UNTIL THEN, SEND THE LINKS ON WHATSAPP.
+                EMAIL IS OFF — ADD GMAIL_APP_PASSWORD ON THE SERVER. UNTIL THEN, SEND THE LINKS ON WHATSAPP.
               </p>
             )}
             {r.delivered_at && (
