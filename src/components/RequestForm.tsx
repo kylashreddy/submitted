@@ -248,6 +248,7 @@ export function RequestForm() {
             <input type="date" className={field} min={today()} value={d.deadline} onChange={(e) => set("deadline", e.target.value)} aria-label="Deadline" />
             <div className="flex flex-wrap gap-2">
               {[
+                ["1 DAY 🔥", 1],
                 ["3 DAYS 💀", 3],
                 ["1 WEEK", 7],
                 ["2 WEEKS", 14],
@@ -260,7 +261,14 @@ export function RequestForm() {
             </div>
             {days !== null && days >= 0 && (
               <p className="mono">
-                ↳ {days} DAY{days === 1 ? "" : "S"} OUT. {days < 4 ? <span className="text-alarm">TIGHT. WE&apos;LL BE HONEST ABOUT WHAT&apos;S DOABLE.</span> : "PLENTY. WE LOVE AN EARLY BIRD."}
+                ↳ {days} DAY{days === 1 ? "" : "S"} OUT.{" "}
+                {days <= 1 ? (
+                  <span className="text-alarm">DUE TOMORROW. SEND IT NOW — WE&apos;LL TELL YOU STRAIGHT WHAT&apos;S DOABLE BY THEN.</span>
+                ) : days < 4 ? (
+                  <span className="text-alarm">TIGHT. WE&apos;LL BE HONEST ABOUT WHAT&apos;S DOABLE.</span>
+                ) : (
+                  "PLENTY. WE LOVE AN EARLY BIRD."
+                )}
               </p>
             )}
           </div>

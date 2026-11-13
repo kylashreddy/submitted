@@ -107,7 +107,7 @@ export const FAQ = [
   },
   {
     q: "HOW FAST?",
-    a: "First reply within 24 hours. Most kits land in 3–7 days. Deadline in 72 hours? Tell us — we'll be honest about what's doable.",
+    a: "First reply within 24 hours. Most kits land in 3–7 days. Due tomorrow? Still drop it — pick the 1-day deadline and we'll be honest about what's doable.",
   },
   {
     q: "ARE YOU PART OF JAIN UNIVERSITY?",
