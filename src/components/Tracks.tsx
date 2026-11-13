@@ -54,7 +54,7 @@ export function Tracks() {
                       <ul className="border-t border-paper/25">
                         {t.includes.map((x, j) => (
                           <li key={x} className="flex gap-4 border-b border-paper/25 py-2.5 text-lg">
-                            <span className="mono pt-1 text-paper/50">{String(j + 1).padStart(2, "0")}</span>
+                            <span className="mono pt-1 text-paper/65">{String(j + 1).padStart(2, "0")}</span>
                             {x}
                           </li>
                         ))}

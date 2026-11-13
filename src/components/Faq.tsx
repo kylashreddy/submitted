@@ -26,7 +26,7 @@ export function Faq() {
                     className="mono flex w-full items-center justify-between gap-4 py-5 text-left text-[0.8rem] hover:text-blue"
                   >
                     <span>
-                      <span className="mr-3 text-ink/45">Q.0{i + 1}</span>
+                      <span className="mr-3 text-ink/65">Q.0{i + 1}</span>
                       {f.q}
                     </span>
                     <span aria-hidden className="text-lg">{isOpen ? "−" : "+"}</span>

@@ -17,7 +17,7 @@ export function Problem() {
             <Reveal className="display text-[12.5vw] md:text-[7.4vw]" delay={i * 0.08}>
               {l.text}
             </Reveal>
-            <span className="mono pb-1 text-ink/55 md:pb-[1.2vw]">{l.note}</span>
+            <span className="mono pb-1 text-ink/65 md:pb-[1.2vw]">{l.note}</span>
           </div>
         ))}
         <Reveal as="p" className="display mt-4 text-right text-[20vw] md:text-[11vw]" delay={0.2}>

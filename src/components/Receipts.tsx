@@ -67,7 +67,7 @@ export function Receipts() {
         <ul className="mt-16 grid gap-5 md:grid-cols-3 md:gap-6">
           {PROMISES.map((r, i) => (
             <li key={r.n} className={`border border-paper/25 bg-[#141414] ${i % 3 === 1 ? "md:translate-y-10" : ""} ${i % 2 ? "rotate-[0.6deg]" : "-rotate-[0.6deg]"}`}>
-              <div className="mono flex items-center justify-between border-b border-paper/15 px-4 py-2 text-paper/55">
+              <div className="mono flex items-center justify-between border-b border-paper/15 px-4 py-2 text-paper/65">
                 <span>PROMISE {r.n}</span>
                 <span>SUBMITTED.</span>
               </div>
@@ -79,7 +79,7 @@ export function Receipts() {
         </ul>
       </div>
       <div className="pb-14 md:pb-20">
-        <p className="mono mx-auto mb-4 max-w-[1600px] px-4 text-paper/50 md:px-8">WE HELP WITH —</p>
+        <p className="mono mx-auto mb-4 max-w-[1600px] px-4 text-paper/65 md:px-8">WE HELP WITH —</p>
         <Marquee items={STUCK_ON} dark={false} duration={55} outline />
       </div>
     </section>

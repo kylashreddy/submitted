@@ -77,7 +77,7 @@ export function Nav() {
           {[...LINKS, { href: "#drop", label: "DROP IT" }].map((l, i) => (
             <li key={l.href} className="border-b border-paper/15">
               <a href={l.href} onClick={() => setOpen(false)} className="flex items-baseline gap-4 py-3">
-                <span className="mono text-paper/50">0{i + 1}</span>
+                <span className="mono text-paper/65">0{i + 1}</span>
                 <span className="display text-[15vw] leading-[0.9]">{l.label}</span>
               </a>
             </li>

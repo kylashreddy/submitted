@@ -1,7 +1,6 @@
 "use client";
 
-import { AnimatePresence, MotionConfig, motion } from "framer-motion";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { BRANCHES, DOMAINS, INSTAGRAM, TRACKS } from "@/lib/content";
 import { HELP_OPTIONS } from "@/lib/types";
 import { EMAIL_RE } from "@/lib/validate";
@@ -346,10 +345,9 @@ export function RequestForm() {
           </a>
         </div>
 
-        <MotionConfig reducedMotion="user">
           <div className="min-w-0 border border-ink bg-paper" onKeyDown={onKey}>
             {state === "done" ? (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex min-h-[460px] flex-col justify-between p-5 md:p-10" role="status">
+              <div className="fade-in flex min-h-[460px] flex-col justify-between p-5 md:p-10" role="status">
                 <p className="mono">{ref ? `REQ #${String(ref).padStart(4, "0")} · RECEIVED` : "RECEIVED"}</p>
                 <div>
                   <p className="display text-[12vw] leading-[0.8] md:text-[6.6vw]">SUBMITTED.</p>
@@ -363,36 +361,27 @@ export function RequestForm() {
                     DROP ANOTHER ONE
                   </button>
                 </div>
-              </motion.div>
+              </div>
             ) : (
               <>
                 <div className="flex items-center justify-between border-b border-ink px-4 py-3 md:px-6">
                   <span className="mono" aria-live="polite">
                     STEP {String(step + 1).padStart(2, "0")} / {STEPS.length}
                   </span>
-                  <span className="mono text-ink/45">{last ? "LAST ONE" : `${STEPS.length - step - 1} TO GO`}</span>
+                  <span className="mono text-ink/65">{last ? "LAST ONE" : `${STEPS.length - step - 1} TO GO`}</span>
                 </div>
                 <div className="h-1 bg-ink/10">
                   <div className="h-full bg-blue transition-[width] duration-500" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
                 </div>
 
                 <div className="relative min-h-[430px] overflow-hidden px-4 pb-6 pt-7 md:min-h-[460px] md:px-8 md:pt-10">
-                  <AnimatePresence mode="wait" custom={dir} initial={false}>
-                    <motion.div
-                      key={step}
-                      ref={panel}
-                      custom={dir}
-                      initial={{ x: dir * 48, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ x: dir * -48, opacity: 0 }}
-                      transition={{ duration: 0.28, ease: [0.2, 0.8, 0.1, 1] }}
-                    >
+                  {/* keyed so each step remounts and slides in from the direction of travel; no slide on first paint */}
+                  <div key={step} ref={panel} className={moved.current ? "step-in" : undefined} style={{ "--dx": `${dir * 48}px` } as CSSProperties}>
                       <h3 className="display text-[2.15rem] leading-[0.9] md:text-[3.4rem]">{rich(cur.q)}</h3>
-                      {cur.hint && <p className="mono mt-3 text-ink/50">{cur.hint}</p>}
+                      {cur.hint && <p className="mono mt-3 text-ink/65">{cur.hint}</p>}
                       <div className="mt-8">{body}</div>
                       {tried && !valid && <p className="mono mt-4 text-alarm">↳ {cur.err}</p>}
-                    </motion.div>
-                  </AnimatePresence>
+                  </div>
                   {/* honeypot — real humans never see this */}
                   <input ref={honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] h-0 w-0" />
                 </div>
@@ -416,7 +405,6 @@ export function RequestForm() {
               </>
             )}
           </div>
-        </MotionConfig>
       </div>
     </section>
   );

@@ -22,7 +22,7 @@ function Ticket() {
           <dl className="mt-4 divide-y divide-ink/25 border-y border-ink/25">
             {rows.map(([k, v]) => (
               <div key={k} className="mono flex justify-between py-1.5">
-                <dt className="text-ink/55">{k}</dt>
+                <dt className="text-ink/65">{k}</dt>
                 <dd>{v}</dd>
               </div>
             ))}

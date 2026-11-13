@@ -145,6 +145,24 @@ body {
   width: max-content;
   animation: marquee var(--dur, 32s) linear infinite;
 }
+/* request form: step slide + success fade (replaces framer-motion) */
+.step-in {
+  animation: step-in 0.28s cubic-bezier(0.2, 0.8, 0.1, 1) both;
+}
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--dx, 48px));
+  }
+}
+.fade-in {
+  animation: fade-in 0.4s ease both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
 @keyframes marquee {
   to {
     transform: translateX(-50%);
@@ -238,7 +256,9 @@ body {
     transform: none;
   }
   .marquee,
-  .pulse {
+  .pulse,
+  .step-in,
+  .fade-in {
     animation: none;
   }
   .reveal {
