@@ -23,6 +23,9 @@ export function Footer() {
         <div className="mono text-ink/60 md:text-right">
           <p>© 2026 · MADE BY STUDENTS WHO ALSO HATED DEADLINES</p>
           <p className="mt-1">INDEPENDENT STUDENT CREW · NOT AFFILIATED WITH JAIN UNIVERSITY</p>
+          <p className="mt-1">
+            <a href="/privacy" className="underline-offset-4 hover:underline">PRIVACY</a>
+          </p>
         </div>
       </div>
       <p aria-hidden className="display mt-6 select-none whitespace-nowrap px-2 text-center text-[14.6vw] leading-[0.8] tracking-[-0.04em] md:mt-10">
