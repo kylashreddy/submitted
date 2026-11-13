@@ -118,6 +118,7 @@ export function AdminBoard({
             <span className="hidden md:inline">
               {counts.total} TOTAL · {counts.fresh} NEW · <span className={counts.hot ? "text-alarm" : ""}>{counts.hot} HOT</span>
             </span>
+            <Link href="/admin/logs" className="hover:underline">LOGS</Link>
             <button onClick={() => router.refresh()} className="hover:underline">↻ SYNC</button>
             <button onClick={logout} className="hover:underline" title={email}>LOG OUT</button>
           </div>

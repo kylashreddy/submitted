@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { clientIp, logActivity } from "@/lib/activity";
 import { getAdmin } from "@/lib/auth";
 import { sendDelivery } from "@/lib/email";
 import { getRequest, updateRequest } from "@/lib/store";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!(await getAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const admin = await getAdmin();
+  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
   const body = (await req.json().catch(() => ({}))) as { links?: unknown; message?: unknown };
 
@@ -32,6 +34,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       status: "DELIVERED",
       delivery_links: links,
       delivered_at: new Date().toISOString(),
+    });
+    await logActivity({
+      actor: admin.email,
+      action: "DELIVERY",
+      request_id: row.id,
+      request_ref: row.ref,
+      detail: `${links.length} link(s) · ${dryRun ? "not emailed (email off)" : `emailed to ${row.email}`}`,
+      ip: clientIp(req),
     });
     return NextResponse.json({ row: updated, dryRun });
   } catch (e) {

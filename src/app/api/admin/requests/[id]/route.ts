@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
+import { clientIp, logActivity } from "@/lib/activity";
 import { getAdmin } from "@/lib/auth";
 import { crewNames } from "@/lib/content";
-import { updateRequest } from "@/lib/store";
-import { STATUSES, type RequestPatch, type Status } from "@/lib/types";
+import { getRequest, updateRequest } from "@/lib/store";
+import { STATUSES, STATUS_LABEL, type RequestPatch, type Status } from "@/lib/types";
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (!(await getAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const admin = await getAdmin();
+  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
   const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
 
@@ -24,8 +26,19 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (Object.keys(patch).length === 0) return NextResponse.json({ error: "Nothing to update" }, { status: 400 });
 
   try {
+    const before = await getRequest(id);
     const row = await updateRequest(id, patch);
     if (!row) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    // One log line per field that actually changed.
+    const base = { actor: admin.email, request_id: row.id, request_ref: row.ref, ip: clientIp(req) };
+    if (patch.status && before?.status !== patch.status)
+      await logActivity({ ...base, action: "STATUS", detail: `${before ? STATUS_LABEL[before.status] : "?"} → ${STATUS_LABEL[patch.status]}` });
+    if ("assignee" in patch && before?.assignee !== patch.assignee)
+      await logActivity({ ...base, action: "ASSIGN", detail: `${before?.assignee ?? "unassigned"} → ${patch.assignee ?? "unassigned"}` });
+    if ("admin_notes" in patch && before?.admin_notes !== patch.admin_notes)
+      await logActivity({ ...base, action: "NOTES", detail: `"${(patch.admin_notes ?? "").slice(0, 140)}"` });
+
     return NextResponse.json(row);
   } catch (e) {
     console.error("[admin:update]", e);

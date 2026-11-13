@@ -10,12 +10,18 @@ export function Cursor() {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     const el = ref.current!;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.documentElement.classList.add("has-cursor");
 
-    let x = -100, y = -100, cx = -100, cy = -100, raf = 0;
+    let x = -100, y = -100, cx = -100, cy = -100, raf = 0, first = true;
     const move = (e: PointerEvent) => {
       x = e.clientX;
       y = e.clientY;
+      if (first) {
+        // Hide the system cursor only once ours is actually on screen.
+        first = false;
+        cx = x;
+        cy = y;
+        document.documentElement.classList.add("has-cursor");
+      }
       el.style.opacity = "1";
       const t = e.target as Element | null;
       el.dataset.mode = t?.closest?.("[data-cursor='drop']") ? "drop" : t?.closest?.("a,button,[role='button'],label,select") ? "link" : "";
@@ -46,10 +52,12 @@ export function Cursor() {
       data-mode=""
       className="group pointer-events-none fixed left-0 top-0 z-[100] opacity-0 transition-opacity duration-200"
     >
+      {/* Solid accent + paper ring: readable on paper, ink strips and the dark section alike.
+          (No mix-blend — the wrapper's opacity isolates it, which made the dot paper-on-paper.) */}
       <div
-        className="flex h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full bg-paper mix-blend-difference transition-[width,height,background-color] duration-300 ease-out
-          group-data-[mode=link]:h-9 group-data-[mode=link]:w-9
-          group-data-[mode=drop]:h-24 group-data-[mode=drop]:w-24 group-data-[mode=drop]:bg-ink group-data-[mode=drop]:mix-blend-normal group-data-[mode=drop]:outline group-data-[mode=drop]:outline-1 group-data-[mode=drop]:outline-paper"
+        className="flex h-3 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-paper bg-blue shadow-[0_0_0_1px_rgb(14_14_14/0.35)] transition-[width,height,background-color,border-color] duration-300 ease-out
+          group-data-[mode=link]:h-10 group-data-[mode=link]:w-10 group-data-[mode=link]:border-blue group-data-[mode=link]:bg-blue/15
+          group-data-[mode=drop]:h-24 group-data-[mode=drop]:w-24 group-data-[mode=drop]:border-blue group-data-[mode=drop]:bg-ink"
       >
         <span className="mono whitespace-nowrap text-[0.66rem] text-paper opacity-0 transition-opacity duration-200 group-data-[mode=drop]:opacity-100">
           DROP IT
