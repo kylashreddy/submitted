@@ -2,6 +2,13 @@
 
 export const UNIVERSITY = "Jain University";
 
+// Instagram is the main point of contact. ig.me opens a DM thread straight away.
+export const INSTAGRAM = {
+  handle: "@submitted.co",
+  url: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/submitted.co",
+  dm: "https://ig.me/m/submitted.co",
+};
+
 export const STATS = { shipped: 247, branches: 9, vivasFailed: 0 };
 
 export const DOMAINS = [
@@ -17,7 +24,7 @@ export const DOMAINS = [
 
 export const STEPS = [
   { title: "DROP THE REQ", body: "Domain, deadline, what you're stuck on. Two minutes, tops." },
-  { title: "WE VIBE CHECK IT", body: "A crew member emails you within 24h. Real human, real senior." },
+  { title: "WE VIBE CHECK IT", body: "A real senior replies within 24h — by email, or straight in your DMs if you ping @submitted.co." },
   { title: "WE BUILD IT WITH YOU", body: "Starter code, a step-by-step guide and 1:1 doubt calls when you hit a wall." },
   { title: "INBOX DELIVERY", body: "Kit + report template + viva prep notes, straight to your mail." },
   { title: "YOU ACTUALLY UNDERSTAND IT", body: "No blank stares in the viva. You can explain every line." },
@@ -108,6 +115,10 @@ export const FAQ = [
   {
     q: "HOW FAST?",
     a: "First reply within 24 hours. Most kits land in 3–7 days. Due tomorrow? Still drop it — pick the 1-day deadline and we'll be honest about what's doable.",
+  },
+  {
+    q: "CAN I JUST DM YOU?",
+    a: "Yes — DM @submitted.co on Instagram with your domain, deadline and what you're stuck on. Already filled the form? Send your REQ number and we'll pick it up from there.",
   },
   {
     q: "ARE YOU PART OF JAIN UNIVERSITY?",

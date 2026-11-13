@@ -2,7 +2,7 @@
 
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { BRANCHES, DOMAINS, TRACKS } from "@/lib/content";
+import { BRANCHES, DOMAINS, INSTAGRAM, TRACKS } from "@/lib/content";
 import { HELP_OPTIONS } from "@/lib/types";
 import { EMAIL_RE } from "@/lib/validate";
 import { PREFILL_EVENT } from "./Tracks";
@@ -309,6 +309,9 @@ export function RequestForm() {
             <li>↳ REPLY WITHIN 24H.</li>
             <li className="hidden md:block">↳ PRESS ENTER ↵ TO MOVE ON.</li>
           </ul>
+          <a href={INSTAGRAM.dm} target="_blank" rel="noreferrer" className="mono mt-8 inline-block border-b border-ink pb-1 hover:text-blue">
+            HATE FORMS? DM {INSTAGRAM.handle.toUpperCase()} ↗
+          </a>
         </div>
 
         <MotionConfig reducedMotion="user">
@@ -318,11 +321,16 @@ export function RequestForm() {
                 <p className="mono">{ref ? `REQ #${String(ref).padStart(4, "0")} · RECEIVED` : "RECEIVED"}</p>
                 <div>
                   <p className="display text-[12vw] leading-[0.8] md:text-[6.6vw]">SUBMITTED.</p>
-                  <p className="serif-i mt-4 text-3xl leading-tight md:text-5xl">check your inbox in 24h. touch grass meanwhile.</p>
+                  <p className="serif-i mt-4 text-3xl leading-tight md:text-5xl">check your inbox in 24h — or DM us your REQ number for a faster reply.</p>
                 </div>
-                <button type="button" onClick={reset} className="btn btn-ghost self-start">
-                  DROP ANOTHER ONE
-                </button>
+                <div className="flex flex-wrap gap-3">
+                  <a href={INSTAGRAM.dm} target="_blank" rel="noreferrer" className="btn btn-primary">
+                    {ref ? `DM US REQ #${String(ref).padStart(4, "0")}` : "DM US ON INSTAGRAM"} ↗
+                  </a>
+                  <button type="button" onClick={reset} className="btn btn-ghost">
+                    DROP ANOTHER ONE
+                  </button>
+                </div>
               </motion.div>
             ) : (
               <>

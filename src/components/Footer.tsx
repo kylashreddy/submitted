@@ -1,6 +1,9 @@
-// Public contact is email + Instagram only — never publish a phone number on this site.
+import { INSTAGRAM } from "@/lib/content";
+
+// Public contact is Instagram + email only — never publish a phone number on this site.
 const LINKS = [
-  { label: "INSTAGRAM", href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/submitted.co" },
+  { label: "DM US ON INSTAGRAM", href: INSTAGRAM.dm },
+  { label: INSTAGRAM.handle.toUpperCase(), href: INSTAGRAM.url },
   { label: "EMAIL", href: `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || "bit.geniuses.ac@gmail.com"}` },
 ];
 

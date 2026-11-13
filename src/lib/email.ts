@@ -64,7 +64,7 @@ export function sendConfirmation(r: RequestRow) {
       `REQ ${refNo(r)} · ${esc(r.domain)} · YEAR ${r.year}`,
       `GOT IT, ${first}.`,
       p("Your requirement just landed with the crew. A senior will reply to this email within 24 hours to vibe check the scope and timeline.") +
-        p("Nothing to do yet. Touch grass meanwhile.") +
+        p(`Want a faster reply? DM your REQ number to <a href="https://ig.me/m/submitted.co" style="color:#2F4BFF">@submitted.co</a> on Instagram.`) +
         p(`<span style="font-family:'Courier New',monospace;font-size:13px">DEADLINE ON FILE: ${esc(r.deadline)}</span>`),
     ),
   );

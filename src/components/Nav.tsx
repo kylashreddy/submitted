@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { STATS } from "@/lib/content";
+import { INSTAGRAM, STATS } from "@/lib/content";
 import { Arrow } from "./ui";
 
 const LINKS = [
@@ -37,9 +37,14 @@ export function Nav() {
               </li>
             ))}
           </ul>
-          <a href="#drop" data-cursor="drop" className="btn btn-primary hidden !py-3 md:inline-flex">
-            DROP YOUR REQ <Arrow className="arr" />
-          </a>
+          <div className="hidden items-center gap-6 md:flex">
+            <a href={INSTAGRAM.dm} target="_blank" rel="noreferrer" className="mono underline-offset-4 hover:underline">
+              DM US ↗
+            </a>
+            <a href="#drop" data-cursor="drop" className="btn btn-primary !py-3">
+              DROP YOUR REQ <Arrow className="arr" />
+            </a>
+          </div>
           <button
             type="button"
             className="mono -mr-2 px-2 py-3 md:hidden"
@@ -84,6 +89,9 @@ export function Nav() {
         </p>
         <a href="#drop" onClick={() => setOpen(false)} className="btn w-full border-paper bg-paper text-ink">
           DROP YOUR REQUIREMENT <Arrow className="arr" />
+        </a>
+        <a href={INSTAGRAM.dm} target="_blank" rel="noreferrer" className="btn mt-3 w-full border-paper text-paper">
+          OR DM {INSTAGRAM.handle.toUpperCase()} ↗
         </a>
       </div>
     </>
