@@ -10,7 +10,7 @@ create table if not exists public.requests (
   -- from the public form
   name           text not null check (char_length(name) between 2 and 80),
   email          text not null check (char_length(email) <= 120),
-  phone          text not null check (char_length(phone) <= 20),
+  phone          text not null default '' check (char_length(phone) <= 20), -- no longer collected
   college        text not null default 'Jain University',
   year           smallint not null check (year between 1 and 4),
   branch         text not null,

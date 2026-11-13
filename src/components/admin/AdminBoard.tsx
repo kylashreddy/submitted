@@ -328,7 +328,6 @@ function Drawer({
     }
   }
 
-  const wa = "https://wa.me/" + r.phone.replace(/[^\d]/g, "").replace(/^(\d{10})$/, "91$1");
   const meta: [string, string][] = [
     ["BRANCH", r.branch],
     ["YEAR", String(r.year)],
@@ -355,7 +354,6 @@ function Drawer({
             <p className="mt-2 text-lg">{r.no_idea ? <em className="serif-i text-2xl">no idea yet — help pick</em> : r.title}</p>
             <div className="mono mt-4 flex flex-wrap gap-2">
               <a href={`mailto:${r.email}`} className="border border-ink px-2 py-1.5 hover:bg-ink hover:text-paper">✉ {r.email}</a>
-              <a href={wa} target="_blank" rel="noreferrer" className="border border-ink px-2 py-1.5 hover:bg-ink hover:text-paper">WA ↗ {r.phone}</a>
             </div>
           </div>
 
@@ -419,7 +417,7 @@ function Drawer({
             </p>
             {!emailOn && (
               <p className="mono mt-3 bg-alarm px-2 py-1.5 text-paper">
-                EMAIL IS OFF — ADD GMAIL_APP_PASSWORD ON THE SERVER. UNTIL THEN, SEND THE LINKS ON WHATSAPP.
+                EMAIL IS OFF — ADD GMAIL_APP_PASSWORD ON THE SERVER. UNTIL THEN, MAIL THE LINKS FROM BIT.GENIUSES.AC@GMAIL.COM YOURSELF.
               </p>
             )}
             {r.delivered_at && (

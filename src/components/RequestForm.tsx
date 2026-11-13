@@ -4,14 +4,13 @@ import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { BRANCHES, DOMAINS, TRACKS } from "@/lib/content";
 import { HELP_OPTIONS } from "@/lib/types";
-import { EMAIL_RE, PHONE_RE } from "@/lib/validate";
+import { EMAIL_RE } from "@/lib/validate";
 import { PREFILL_EVENT } from "./Tracks";
 import { Arrow, SectionLabel, rich } from "./ui";
 
 type Data = {
   name: string;
   email: string;
-  phone: string;
   branch: string;
   year: number | null;
   domain: string;
@@ -25,7 +24,6 @@ type Data = {
 const INITIAL: Data = {
   name: "",
   email: "",
-  phone: "",
   branch: "",
   year: null,
   domain: "",
@@ -45,7 +43,7 @@ const daysUntil = (iso: string) => Math.round((Date.parse(iso) - Date.parse(toda
 
 const STEPS: { q: string; hint?: string; ok: (d: Data) => boolean; err: string }[] = [
   { q: "FIRST THINGS FIRST. *what's* YOUR NAME?", ok: (d) => d.name.trim().length >= 2, err: "need at least 2 letters" },
-  { q: "WHERE DO WE *reach* YOU?", hint: "WE REPLY BY EMAIL. YOUR KIT LANDS THERE TOO.", ok: (d) => EMAIL_RE.test(d.email.trim()) && PHONE_RE.test(d.phone.trim()), err: "check the email + a 10-digit number" },
+  { q: "WHAT'S YOUR *email*?", hint: "WE REPLY BY EMAIL. YOUR KIT LANDS THERE TOO.", ok: (d) => EMAIL_RE.test(d.email.trim()), err: "that email looks off" },
   { q: "WHICH *branch*?", hint: "JAIN UNIVERSITY BTECH ONLY — FOR NOW.", ok: (d) => !!d.branch, err: "pick your branch" },
   { q: "WHICH *year* ARE YOU IN?", ok: (d) => d.year !== null, err: "pick one" },
   { q: "PICK YOUR *domain*.", hint: "NOT SURE? PICK THE CLOSEST. WE'LL SORT IT.", ok: (d) => !!d.domain, err: "pick one" },
@@ -182,16 +180,7 @@ export function RequestForm() {
         return <input className={field} value={d.name} onChange={(e) => set("name", e.target.value)} placeholder="Type it here" autoComplete="name" aria-label="Your name" />;
       case 1:
         return (
-          <div className="space-y-6">
-            <label className="block">
-              <span className="mono text-ink/55">EMAIL</span>
-              <input className={field} type="email" inputMode="email" value={d.email} onChange={(e) => set("email", e.target.value)} placeholder="you@college.edu" autoComplete="email" />
-            </label>
-            <label className="block">
-              <span className="mono text-ink/55">PHONE / WHATSAPP</span>
-              <input className={field} type="tel" inputMode="tel" value={d.phone} onChange={(e) => set("phone", e.target.value)} placeholder="+91 98xxx xxxxx" autoComplete="tel" />
-            </label>
-          </div>
+          <input className={field} type="email" inputMode="email" value={d.email} onChange={(e) => set("email", e.target.value)} placeholder="you@college.edu" autoComplete="email" aria-label="Email" />
         );
       case 2:
         return (

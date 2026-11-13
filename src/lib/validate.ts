@@ -4,7 +4,6 @@ import { HELP_OPTIONS, type RequestInput } from "./types";
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-export const PHONE_RE = /^\+?[0-9\s-]{10,15}$/;
 
 /** Server-side check of the public form payload. Never trust the client. */
 export function parseRequest(body: unknown): { data: RequestInput } | { error: string } {
@@ -13,7 +12,7 @@ export function parseRequest(body: unknown): { data: RequestInput } | { error: s
 
   const name = str(b.name, 80);
   const email = str(b.email, 120).toLowerCase();
-  const phone = str(b.phone, 20);
+  const phone = ""; // phone numbers are no longer collected; column kept for older rows
   const college = UNIVERSITY; // site is Jain-only; never taken from the client
   const branch = str(b.branch, 40);
   const domain = str(b.domain, 40);
@@ -28,7 +27,6 @@ export function parseRequest(body: unknown): { data: RequestInput } | { error: s
 
   if (name.length < 2) return { error: "Name is required" };
   if (!EMAIL_RE.test(email)) return { error: "Email looks off" };
-  if (!PHONE_RE.test(phone)) return { error: "Phone / WhatsApp looks off" };
   if (![1, 2, 3, 4].includes(year)) return { error: "Pick a year" };
   if (!branch) return { error: "Branch is required" };
   if (!domain) return { error: "Pick a domain" };

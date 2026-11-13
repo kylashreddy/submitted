@@ -76,7 +76,6 @@ export function notifyCrew(r: RequestRow) {
   const rows = [
     ["Name", r.name],
     ["Email", r.email],
-    ["WhatsApp", r.phone],
     ["Branch", `${r.branch} · Year ${r.year}`],
     ["Domain", r.domain],
     ["Title", r.no_idea ? "No idea yet — help pick" : r.title],
