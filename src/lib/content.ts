@@ -9,8 +9,6 @@ export const INSTAGRAM = {
   dm: "https://ig.me/m/submitted.co",
 };
 
-export const STATS = { shipped: 247, branches: 9, vivasFailed: 0 };
-
 export const DOMAINS = [
   "ML",
   "IOT",
@@ -57,20 +55,21 @@ export const TRACKS = [
   },
 ];
 
-export const RECEIPTS = [
-  { quote: "bro the viva prep notes saved my life", who: "Ananya", meta: "3RD YR · CSE", time: "23:47" },
-  { quote: "external asked me 6 questions. 5 were literally on the sheet 💀", who: "Rohit", meta: "4TH YR · ECE", time: "14:12" },
-  { quote: "my guide said 'good work' for the first time in 3 years", who: "Sneha", meta: "4TH YR · IT", time: "18:03" },
-  { quote: "ngl i thought it'd be a scam. it ran on the first try", who: "Arjun", meta: "2ND YR · AIML", time: "02:31" },
-  { quote: "they explained the arduino wiring like i was 5. needed that", who: "Meghana", meta: "3RD YR · EEE", time: "11:58" },
-  { quote: "submitted 4 hrs early. who even am i", who: "Faiz", meta: "1ST YR · CSE", time: "20:20" },
+// Only claims we can stand behind. Swap in real student quotes (with their OK) once they exist.
+export const PROMISES = [
+  { n: "01", quote: "First human reply within 24 hours. A real senior, not a call centre." },
+  { n: "02", quote: "If it doesn't run on your machine, we hop on a call and fix it with you." },
+  { n: "03", quote: "Your department's report format. Margins, chapter order, everything." },
+  { n: "04", quote: "Viva prep included — the questions they always ask, with answers you get." },
+  { n: "05", quote: "You build it with us, so you can explain every line yourself." },
+  { n: "06", quote: "Your details stay between you and the crew. Never shared, never sold." },
 ];
 
 export const COUNTERS = [
-  { n: STATS.shipped, label: "PROJECTS SHIPPED" },
-  { n: STATS.branches, label: "BRANCHES COVERED" },
-  { n: 24, label: "HR FIRST REPLY", suffix: "h" },
-  { n: STATS.vivasFailed, label: "VIVAS FAILED" },
+  { n: 24, label: "HR FIRST REPLY, MAX", suffix: "h" },
+  { n: 2, label: "MIN TO DROP A REQ" },
+  { n: 4, label: "YEARS COVERED" },
+  { n: 8, label: "BRANCHES" },
 ];
 
 // Second marquee in the dark section: the things students actually get stuck on.
@@ -89,13 +88,13 @@ export const DROP = [
 
 // Public crew list is anonymous on purpose — roles only, no names.
 // Add a `photo` path (file in /public/crew) to swap the placeholder for a portrait.
-export type CrewMember = { role: string; shipped: number; photo?: string };
+export type CrewMember = { role: string; photo?: string };
 
 export const CREW: CrewMember[] = [
-  { role: "FULL STACK · AI/ML", shipped: 60 },
-  { role: "IOT · EMBEDDED", shipped: 42 },
-  { role: "DATA SCIENCE · RESEARCH", shipped: 51 },
-  { role: "ANDROID · WEB", shipped: 38 },
+  { role: "FULL STACK · AI/ML" },
+  { role: "IOT · EMBEDDED" },
+  { role: "DATA SCIENCE · RESEARCH" },
+  { role: "ANDROID · WEB" },
 ];
 
 /** Names for the admin "assign to" menu. Server-only: set CREW_MEMBERS in env so names never ship to the public site. */

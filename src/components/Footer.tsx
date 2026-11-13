@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { INSTAGRAM } from "@/lib/content";
 
 // Public contact is Instagram + email only — never publish a phone number on this site.
@@ -24,7 +25,9 @@ export function Footer() {
           <p>© 2026 · MADE BY STUDENTS WHO ALSO HATED DEADLINES</p>
           <p className="mt-1">INDEPENDENT STUDENT CREW · NOT AFFILIATED WITH JAIN UNIVERSITY</p>
           <p className="mt-1">
-            <a href="/privacy" className="underline-offset-4 hover:underline">PRIVACY</a>
+            <Link href="/privacy" className="underline-offset-4 hover:underline">PRIVACY</Link>
+            {" · "}
+            <Link href="/terms" className="underline-offset-4 hover:underline">TERMS</Link>
           </p>
         </div>
       </div>

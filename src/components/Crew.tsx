@@ -36,7 +36,7 @@ export function Crew() {
                 <span className="mono absolute right-2 top-2 bg-paper px-1.5 text-[0.62rem]">SENIOR</span>
               </div>
               <figcaption className="mono mt-3 leading-relaxed">
-                <strong className="font-bold">MENTOR 0{i + 1}</strong> — {c.role} — SHIPPED {c.shipped}+
+                <strong className="font-bold">MENTOR 0{i + 1}</strong> — {c.role}
               </figcaption>
             </figure>
           </li>

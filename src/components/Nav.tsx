@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { INSTAGRAM, STATS } from "@/lib/content";
+import { INSTAGRAM } from "@/lib/content";
 import { Arrow } from "./ui";
 
 const LINKS = [
@@ -85,7 +85,7 @@ export function Nav() {
         </ul>
         <p className="mono mb-4 text-paper/70">
           <span className="pulse mr-2 inline-block h-2 w-2 rounded-full bg-blue align-middle" />
-          {STATS.shipped} PROJECTS SHIPPED · {STATS.branches} BRANCHES · {STATS.vivasFailed} VIVAS FAILED
+          24H FIRST REPLY · 1ST–4TH YEAR · JAIN UNIVERSITY
         </p>
         <a href="#drop" onClick={() => setOpen(false)} className="btn w-full border-paper bg-paper text-ink">
           DROP YOUR REQUIREMENT <Arrow className="arr" />

@@ -119,6 +119,7 @@ export function AdminBoard({
               {counts.total} TOTAL · {counts.fresh} NEW · <span className={counts.hot ? "text-alarm" : ""}>{counts.hot} HOT</span>
             </span>
             <Link href="/admin/logs" className="hover:underline">LOGS</Link>
+            <a href="/api/admin/export" className="hover:underline" title="Download every request as CSV">EXPORT</a>
             <button onClick={() => router.refresh()} className="hover:underline">↻ SYNC</button>
             <button onClick={logout} className="hover:underline" title={email}>LOG OUT</button>
           </div>

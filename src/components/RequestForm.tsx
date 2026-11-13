@@ -8,6 +8,14 @@ import { EMAIL_RE } from "@/lib/validate";
 import { PREFILL_EVENT } from "./Tracks";
 import { Arrow, SectionLabel, rich } from "./ui";
 
+// Cloudflare Turnstile: invisible bot check, only active once the site key is set.
+const TURNSTILE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+declare global {
+  interface Window {
+    turnstile?: { render: (el: HTMLElement, opts: Record<string, unknown>) => string; reset: () => void };
+  }
+}
+
 type Data = {
   name: string;
   email: string;
@@ -83,6 +91,8 @@ export function RequestForm() {
   const panel = useRef<HTMLDivElement>(null);
   const honeypot = useRef<HTMLInputElement>(null);
   const moved = useRef(false);
+  const captcha = useRef<HTMLDivElement>(null);
+  const captchaToken = useRef("");
 
   const set = <K extends keyof Data>(k: K, v: Data[K]) => setD((p) => ({ ...p, [k]: v }));
 
@@ -98,6 +108,25 @@ export function RequestForm() {
       if (state !== "done") localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
     } catch {}
   }, [d, state]);
+
+  useEffect(() => {
+    const el = captcha.current;
+    if (!TURNSTILE_KEY || !el) return;
+    const mount = () =>
+      window.turnstile?.render(el, {
+        sitekey: TURNSTILE_KEY,
+        appearance: "interaction-only",
+        "refresh-expired": "auto",
+        callback: (t: string) => (captchaToken.current = t),
+        "expired-callback": () => (captchaToken.current = ""),
+      });
+    if (window.turnstile) return void mount();
+    const s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    s.async = true;
+    s.onload = mount;
+    document.head.appendChild(s);
+  }, []);
 
   // tracks section can preselect a year
   useEffect(() => {
@@ -143,7 +172,7 @@ export function RequestForm() {
       const res = await fetch("/api/requests", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...d, website: honeypot.current?.value ?? "" }),
+        body: JSON.stringify({ ...d, website: honeypot.current?.value ?? "", turnstile: captchaToken.current }),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error ?? "Something broke on our side");
@@ -155,6 +184,8 @@ export function RequestForm() {
     } catch (e) {
       setState("error");
       setMsg(e instanceof Error ? e.message : "Something broke on our side");
+      window.turnstile?.reset(); // tokens are single-use
+      captchaToken.current = "";
     }
   }
 
@@ -309,6 +340,7 @@ export function RequestForm() {
             <li>↳ REPLY WITHIN 24H.</li>
             <li className="hidden md:block">↳ PRESS ENTER ↵ TO MOVE ON.</li>
           </ul>
+          <div ref={captcha} className="mt-6 empty:hidden" />
           <a href={INSTAGRAM.dm} target="_blank" rel="noreferrer" className="mono mt-8 inline-block border-b border-ink pb-1 hover:text-blue">
             HATE FORMS? DM {INSTAGRAM.handle.toUpperCase()} ↗
           </a>

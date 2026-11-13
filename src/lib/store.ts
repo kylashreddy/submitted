@@ -87,13 +87,3 @@ export async function updateRequest(id: string, patch: RequestPatch): Promise<Re
   await writeAll(rows);
   return rows[i];
 }
-
-export async function getRequestByRef(ref: number): Promise<RequestRow | null> {
-  if (hasSupabase()) {
-    const { data, error } = await serviceClient().from("requests").select("*").eq("ref", ref).maybeSingle();
-    if (error) throw new Error(error.message);
-    return data as RequestRow | null;
-  }
-  assertFileStoreAllowed();
-  return (await readAll()).find((r) => r.ref === ref) ?? null;
-}

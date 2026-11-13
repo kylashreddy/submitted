@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { COUNTERS, RECEIPTS, STUCK_ON } from "@/lib/content";
+import { COUNTERS, PROMISES, STUCK_ON } from "@/lib/content";
 import { Marquee } from "./Marquee";
 import { Reveal } from "./Reveal";
 import { SectionLabel, rich } from "./ui";
@@ -49,9 +49,9 @@ export function Receipts() {
     >
       <div className="mx-auto max-w-[1600px] px-4 pb-16 pt-20 md:px-8 md:pb-24 md:pt-32">
         <SectionLabel n="04" dark>
-          RECEIPTS
+          THE DEAL
         </SectionLabel>
-        <Reveal className="display mt-8 text-[13vw] md:mt-12 md:text-[6.6vw]">{rich("DON'T TAKE *our* WORD FOR IT.")}</Reveal>
+        <Reveal className="display mt-8 text-[13vw] md:mt-12 md:text-[6.6vw]">{rich("THE DEAL, *in* WRITING.")}</Reveal>
 
         <dl className="mt-14 grid grid-cols-2 border-t border-paper/25 md:grid-cols-4">
           {COUNTERS.map((c, i) => (
@@ -65,26 +65,21 @@ export function Receipts() {
         </dl>
 
         <ul className="mt-16 grid gap-5 md:grid-cols-3 md:gap-6">
-          {RECEIPTS.map((r, i) => (
-            <li key={r.who} className={`border border-paper/25 bg-[#141414] ${i % 3 === 1 ? "md:translate-y-10" : ""} ${i % 2 ? "rotate-[0.6deg]" : "-rotate-[0.6deg]"}`}>
+          {PROMISES.map((r, i) => (
+            <li key={r.n} className={`border border-paper/25 bg-[#141414] ${i % 3 === 1 ? "md:translate-y-10" : ""} ${i % 2 ? "rotate-[0.6deg]" : "-rotate-[0.6deg]"}`}>
               <div className="mono flex items-center justify-between border-b border-paper/15 px-4 py-2 text-paper/55">
-                <span>
-                  {r.who.toUpperCase()} · {r.meta}
-                </span>
-                <span>VIA DM</span>
+                <span>PROMISE {r.n}</span>
+                <span>SUBMITTED.</span>
               </div>
               <div className="p-4">
-                <p className="ml-auto w-fit max-w-[92%] bg-paper px-3.5 py-2.5 text-[1.05rem] leading-snug text-ink">
-                  {r.quote}
-                  <span className="mono ml-3 inline-block text-[0.62rem] text-ink/50">{r.time} ✓✓</span>
-                </p>
+                <p className="w-fit max-w-[92%] bg-paper px-3.5 py-2.5 text-[1.05rem] leading-snug text-ink">{r.quote}</p>
               </div>
             </li>
           ))}
         </ul>
       </div>
       <div className="pb-14 md:pb-20">
-        <p className="mono mx-auto mb-4 max-w-[1600px] px-4 text-paper/50 md:px-8">WE&apos;VE GOT YOU THROUGH —</p>
+        <p className="mono mx-auto mb-4 max-w-[1600px] px-4 text-paper/50 md:px-8">WE HELP WITH —</p>
         <Marquee items={STUCK_ON} dark={false} duration={55} outline />
       </div>
     </section>

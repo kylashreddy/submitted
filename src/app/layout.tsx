@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Archivo_Black, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const archivo = Archivo({ variable: "--font-archivo", subsets: ["latin"], display: "swap" });
@@ -42,7 +43,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       lang="en"
       className={`${archivo.variable} ${archivoBlack.variable} ${instrument.variable} ${jetbrains.variable}`}
     >
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

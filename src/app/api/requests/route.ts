@@ -13,6 +13,19 @@ function throttled(ip: string) {
   return recent.length > 5;
 }
 
+/** Cloudflare Turnstile check. Skipped (passes) until TURNSTILE_SECRET_KEY is set. */
+async function isHuman(token: unknown, ip: string) {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret) return true;
+  if (typeof token !== "string" || !token) return false;
+  const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    body: new URLSearchParams({ secret, response: token, remoteip: ip }),
+  }).catch(() => null);
+  const out = (await res?.json().catch(() => null)) as { success?: boolean } | null;
+  return out?.success === true;
+}
+
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
 
@@ -23,6 +36,10 @@ export async function POST(req: Request) {
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
   if (throttled(ip)) return NextResponse.json({ error: "Easy there — try again in a few minutes" }, { status: 429 });
+
+  if (!(await isHuman(body?.turnstile, ip))) {
+    return NextResponse.json({ error: "Couldn't confirm you're human — refresh the page and try again" }, { status: 400 });
+  }
 
   const parsed = parseRequest(body);
   if ("error" in parsed) return NextResponse.json({ error: parsed.error }, { status: 400 });
