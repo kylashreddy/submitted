@@ -1,7 +1,9 @@
+// Env vars override these; a link with no real target is left out rather than shown broken.
+const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP_URL;
 const LINKS = [
-  { label: "INSTAGRAM", href: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://instagram.com/" },
-  { label: "WHATSAPP", href: process.env.NEXT_PUBLIC_WHATSAPP_URL ?? "https://wa.me/" },
-  { label: "EMAIL", href: `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hello@submitted.studio"}` },
+  { label: "INSTAGRAM", href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/submitted.co" },
+  ...(WHATSAPP && /wa\.me\/\d{10,}/.test(WHATSAPP) ? [{ label: "WHATSAPP", href: WHATSAPP }] : []),
+  { label: "EMAIL", href: `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || "bit.geniuses.ac@gmail.com"}` },
 ];
 
 export function Footer() {
