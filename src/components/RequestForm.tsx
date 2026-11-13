@@ -45,7 +45,7 @@ const daysUntil = (iso: string) => Math.round((Date.parse(iso) - Date.parse(toda
 
 const STEPS: { q: string; hint?: string; ok: (d: Data) => boolean; err: string }[] = [
   { q: "FIRST THINGS FIRST. *what's* YOUR NAME?", ok: (d) => d.name.trim().length >= 2, err: "need at least 2 letters" },
-  { q: "WHERE DO WE *reach* YOU?", hint: "WE REPLY ON WHATSAPP. KIT LANDS IN YOUR MAIL.", ok: (d) => EMAIL_RE.test(d.email.trim()) && PHONE_RE.test(d.phone.trim()), err: "check the email + a 10-digit number" },
+  { q: "WHERE DO WE *reach* YOU?", hint: "WE REPLY BY EMAIL. YOUR KIT LANDS THERE TOO.", ok: (d) => EMAIL_RE.test(d.email.trim()) && PHONE_RE.test(d.phone.trim()), err: "check the email + a 10-digit number" },
   { q: "WHICH *branch*?", hint: "JAIN UNIVERSITY BTECH ONLY — FOR NOW.", ok: (d) => !!d.branch, err: "pick your branch" },
   { q: "WHICH *year* ARE YOU IN?", ok: (d) => d.year !== null, err: "pick one" },
   { q: "PICK YOUR *domain*.", hint: "NOT SURE? PICK THE CLOSEST. WE'LL SORT IT.", ok: (d) => !!d.domain, err: "pick one" },

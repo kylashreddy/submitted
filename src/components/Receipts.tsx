@@ -71,7 +71,7 @@ export function Receipts() {
                 <span>
                   {r.who.toUpperCase()} · {r.meta}
                 </span>
-                <span>VIA WHATSAPP</span>
+                <span>VIA DM</span>
               </div>
               <div className="p-4">
                 <p className="ml-auto w-fit max-w-[92%] bg-paper px-3.5 py-2.5 text-[1.05rem] leading-snug text-ink">

@@ -63,7 +63,7 @@ export function sendConfirmation(r: RequestRow) {
     shell(
       `REQ ${refNo(r)} · ${esc(r.domain)} · YEAR ${r.year}`,
       `GOT IT, ${first}.`,
-      p("Your requirement just landed with the crew. A senior will hit you up on WhatsApp within 24 hours to vibe check the scope and timeline.") +
+      p("Your requirement just landed with the crew. A senior will reply to this email within 24 hours to vibe check the scope and timeline.") +
         p("Nothing to do yet. Touch grass meanwhile.") +
         p(`<span style="font-family:'Courier New',monospace;font-size:13px">DEADLINE ON FILE: ${esc(r.deadline)}</span>`),
     ),
@@ -109,7 +109,7 @@ export function sendDelivery(r: RequestRow, links: string[], message: string) {
       "IT'S IN.",
       (message ? p(esc(message).replace(/\n/g, "<br>")) : "") +
         `<table role="presentation" width="100%" style="border-collapse:collapse;margin:8px 0 18px">${list}</table>` +
-        p("Stuck on anything? Reply to this mail or ping us on WhatsApp — doubt calls are part of the deal."),
+        p("Stuck on anything? Just reply to this mail — doubt calls are part of the deal."),
     ),
     crewInbox(),
   );

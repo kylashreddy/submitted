@@ -17,7 +17,7 @@ export const DOMAINS = [
 
 export const STEPS = [
   { title: "DROP THE REQ", body: "Domain, deadline, what you're stuck on. Two minutes, tops." },
-  { title: "WE VIBE CHECK IT", body: "A crew member reaches out on WhatsApp within 24h. Real human, real senior." },
+  { title: "WE VIBE CHECK IT", body: "A crew member emails you within 24h. Real human, real senior." },
   { title: "WE BUILD IT WITH YOU", body: "Starter code, a step-by-step guide and 1:1 doubt calls when you hit a wall." },
   { title: "INBOX DELIVERY", body: "Kit + report template + viva prep notes, straight to your mail." },
   { title: "YOU ACTUALLY UNDERSTAND IT", body: "No blank stares in the viva. You can explain every line." },

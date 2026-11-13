@@ -1,8 +1,6 @@
-// Env vars override these; a link with no real target is left out rather than shown broken.
-const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP_URL;
+// Public contact is email + Instagram only — never publish a phone number on this site.
 const LINKS = [
   { label: "INSTAGRAM", href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/submitted.co" },
-  ...(WHATSAPP && /wa\.me\/\d{10,}/.test(WHATSAPP) ? [{ label: "WHATSAPP", href: WHATSAPP }] : []),
   { label: "EMAIL", href: `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || "bit.geniuses.ac@gmail.com"}` },
 ];
 

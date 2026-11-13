@@ -34,6 +34,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, ref: row.ref });
   } catch (e) {
     console.error("[requests:create]", e);
-    return NextResponse.json({ error: "Couldn't save that — ping us on WhatsApp" }, { status: 500 });
+    return NextResponse.json({ error: "Couldn't save that — mail us at bit.geniuses.ac@gmail.com" }, { status: 500 });
   }
 }
